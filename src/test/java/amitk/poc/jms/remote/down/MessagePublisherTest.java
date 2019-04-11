@@ -5,6 +5,8 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -33,15 +35,18 @@ public class MessagePublisherTest {
 
     }
 
+//    @Value("#{appProperties.ordersDestinationName}")
+    @Value("#{appProperties.deliveriesDestinationName}")
+    String publisherDestinationName;
     @Test
     public void publishMessageToCustomDestination() throws InterruptedException {
 
 //        logger.info("Context loaded");
 
-        String destinationName = "jms/queue/deliveries";
+//        String destinationName = "jms/queue/deliveries";
         for (int i = 0; i < 100; i++) {
 
-            messagePublisher.postMessage("Message " + i, destinationName);
+            messagePublisher.postMessage("Message " + i, publisherDestinationName);
             Thread.currentThread().sleep(500L);
         }
 

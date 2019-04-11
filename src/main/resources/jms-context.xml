@@ -18,16 +18,16 @@
     <bean id="listener" class="amitk.poc.jms.remote.down.MessageListener" />
 
     <bean id="publisherDestinationName" class="java.lang.String">
-        <constructor-arg value="#{appProperties.deliveriesDestination}"/>
+        <constructor-arg value="#{appProperties.deliveriesDestinationName}"/>
     </bean>
 
     <bean id="listenerDestinationName" class="java.lang.String">
-        <constructor-arg value="#{appProperties.deliveriesDestination}"/>
+        <constructor-arg value="#{appProperties.deliveriesDestinationName}"/>
     </bean>
 
     <util:properties id="appProperties">
-        <prop key="ordersDestination">jms/queue/orders</prop>
-        <prop key="deliveriesDestination">jms/queue/deliveries</prop>
+        <prop key="ordersDestinationName">jms/queue/orders</prop>
+        <prop key="deliveriesDestinationName">jms/queue/deliveries</prop>
     </util:properties>
 
     <jms:listener-container container-type="default" connection-factory="remoteConnectionFactory" acknowledge="auto">
