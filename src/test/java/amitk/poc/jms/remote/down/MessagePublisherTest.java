@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -14,7 +15,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author amitkapps
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:/jms-context.xml")
+@ActiveProfiles("publisher")
+@ContextConfiguration("classpath:/application-context.xml")
 public class MessagePublisherTest {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -35,8 +37,8 @@ public class MessagePublisherTest {
 
     }
 
-//    @Value("#{appProperties.ordersDestinationName}")
-    @Value("#{appProperties.deliveriesDestinationName}")
+    @Value("#{appProperties.ordersDestinationName}")
+//    @Value("#{appProperties.deliveriesDestinationName}")
     String publisherDestinationName;
     @Test
     public void publishMessageToCustomDestination() throws InterruptedException {
@@ -47,7 +49,7 @@ public class MessagePublisherTest {
         for (int i = 0; i < 100; i++) {
 
             messagePublisher.postMessage("Message " + i, publisherDestinationName);
-            Thread.currentThread().sleep(500L);
+            Thread.currentThread().sleep(1000L);
         }
 
     }

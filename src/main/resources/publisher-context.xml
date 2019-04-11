@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans profile="publisher"
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:jms="http://www.springframework.org/schema/jms"
+
+        xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/jms
+    http://www.springframework.org/schema/jms/spring-jms-3.2.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <import resource="jms-context.xml"/>
+
+    <bean id="publisherDestinationName" class="java.lang.String">
+        <constructor-arg value="#{appProperties.ordersDestinationName}"/>
+    </bean>
+
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="remoteConnectionFactory"/>
+        <property name="defaultDestinationName" value="#{publisherDestinationName}" />
+    </bean>
+
+    <bean id="messagePublisher" class="amitk.poc.jms.remote.down.MessagePublisher">
+        <property name="jmsTemplate" ref="jmsTemplate"/>
+        <property name="defaultDestinationName" value="#{publisherDestinationName}"/>
+    </bean>
+</beans>
