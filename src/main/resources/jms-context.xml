@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:jms="http://www.springframework.org/schema/jms"
+
+        xmlns:p="http://www.springframework.org/schema/p"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/jms
+    http://www.springframework.org/schema/jms/spring-jms-3.0.xsd">
+
+<!--
+    <bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"
+          p:brokerURL="tcp://localhost:61616" />
+-->
+
+    <bean id="listener" class="amitk.poc.jms.remote.down.MessageListener" />
+
+    <jms:listener-container container-type="default" connection-factory="remoteConnectionFactory" acknowledge="auto">
+        <jms:listener destination="jms/queue/inbound/source" ref="listener" method="onMessage" />
+    </jms:listener-container>
+
+<!--    <jms:listener-container connection-factory="connectionFactory"  />-->
+
+
+    <bean id="remoteJndiTemplate" class="org.springframework.jndi.JndiTemplate" lazy-init="true">
+        <property name="environment">
+            <props>
+                <prop key="java.naming.provider.url">jnp://localhost:1099</prop>
+                <prop key="java.naming.factory.url.pkgs">org.jnp.interfaces:org.jboss.naming</prop>
+                <prop key="java.naming.factory.initial">org.jnp.interfaces.NamingContextFactory</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="remoteConnectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean" lazy-init="true">
+        <property name="jndiTemplate" ref="remoteJndiTemplate"/>
+        <property name="jndiName" value="ConnectionFactory" />
+        <property name="lookupOnStartup" value="false" />
+        <property name="proxyInterface" value="javax.jms.ConnectionFactory" />
+<!--        <property name="cache" value="false" />-->
+    </bean>
+
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="remoteConnectionFactory"/>
+        <property name="defaultDestinationName" value="jms/queue/inbound/source" />
+    </bean>
+
+    <bean id="messagePublisher" class="amitk.poc.jms.remote.down.MessagePublisher">
+        <property name="jmsTemplate" ref="jmsTemplate"/>
+    </bean>
+</beans>
