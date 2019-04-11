@@ -18,9 +18,20 @@
     <bean id="remoteJndiTemplate" class="org.springframework.jndi.JndiTemplate" lazy-init="true">
         <property name="environment">
             <props>
+                <!-- Provides a list of IP addresses and port numbers for HA-JNDI provider nodes in the cluster.
+                    The client tries those providers one by one and uses the first one that responds.
+                    Multiple endpoints as server1:1100,server2:1100,server3:1100,server4:1100
+                    -->
                 <prop key="java.naming.provider.url">jnp://localhost:1099</prop>
                 <prop key="java.naming.factory.url.pkgs">org.jnp.interfaces:org.jboss.naming</prop>
                 <prop key="java.naming.factory.initial">org.jnp.interfaces.NamingContextFactory</prop>
+                <!-- Disable discovery, since we're suppling the provider urls -->
+                <prop key="jnp.disableDiscovery">true</prop>
+                <!-- Ref: https://docs.jboss.org/jbossas/docs/Server_Configuration_Guide/4/html/The_Naming_InitialContext_Factories-The_standard_naming_context_factory.html-->
+                <!-- The connection timeout in milliseconds. The default value is 0 which means the connection will block until the VM TCP/IP layer times out. -->
+                <prop key="jnp.timeout">5000</prop>
+                <!-- The connected socket read timeout in milliseconds. The default value is 0 which means reads will block. This is the value passed to the Socket.setSoTimeout on the newly connected socket. -->
+                <prop key="jnp.sotimeout">5000</prop>
             </props>
         </property>
     </bean>
@@ -28,6 +39,8 @@
     <bean id="remoteConnectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean" lazy-init="true">
         <property name="jndiTemplate" ref="remoteJndiTemplate"/>
         <property name="jndiName" value="ConnectionFactory" />
+        <!-- By default it looks up the jndi object on startup and failure results in context not getting loaded.
+            Default message listener container will automatically issue retries once we're past the bean creation -->
         <property name="lookupOnStartup" value="false" />
         <property name="proxyInterface" value="javax.jms.ConnectionFactory" />
 <!--        <property name="cache" value="false" />-->
