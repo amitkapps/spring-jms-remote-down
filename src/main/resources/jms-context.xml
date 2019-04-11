@@ -4,11 +4,11 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:jms="http://www.springframework.org/schema/jms"
 
-        xmlns:p="http://www.springframework.org/schema/p"
+        xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
         xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
     http://www.springframework.org/schema/jms
-    http://www.springframework.org/schema/jms/spring-jms-3.0.xsd">
+    http://www.springframework.org/schema/jms/spring-jms-3.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 <!--
     <bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"
@@ -17,8 +17,21 @@
 
     <bean id="listener" class="amitk.poc.jms.remote.down.MessageListener" />
 
+    <bean id="publisherDestinationName" class="java.lang.String">
+        <constructor-arg value="#{appProperties.deliveriesDestination}"/>
+    </bean>
+
+    <bean id="listenerDestinationName" class="java.lang.String">
+        <constructor-arg value="#{appProperties.deliveriesDestination}"/>
+    </bean>
+
+    <util:properties id="appProperties">
+        <prop key="ordersDestination">jms/queue/orders</prop>
+        <prop key="deliveriesDestination">jms/queue/deliveries</prop>
+    </util:properties>
+
     <jms:listener-container container-type="default" connection-factory="remoteConnectionFactory" acknowledge="auto">
-        <jms:listener destination="jms/queue/inbound/source" ref="listener" method="onMessage" />
+        <jms:listener destination="#{listenerDestinationName}" ref="listener" method="onMessage" />
     </jms:listener-container>
 
 <!--    <jms:listener-container connection-factory="connectionFactory"  />-->
@@ -44,10 +57,11 @@
 
     <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
         <property name="connectionFactory" ref="remoteConnectionFactory"/>
-        <property name="defaultDestinationName" value="jms/queue/inbound/source" />
+        <property name="defaultDestinationName" value="#{publisherDestinationName}" />
     </bean>
 
     <bean id="messagePublisher" class="amitk.poc.jms.remote.down.MessagePublisher">
         <property name="jmsTemplate" ref="jmsTemplate"/>
+        <property name="defaultDestinationName" value="#{publisherDestinationName}"/>
     </bean>
 </beans>

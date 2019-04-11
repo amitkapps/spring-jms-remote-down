@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<server>
+
+    <!-- deliveries queue -->
+    <mbean xmbean-dd="xmdesc/Queue-xmbean.xml" name="jboss.messaging.destination:service=Queue,name=jms/queue/deliveries" code="org.jboss.jms.server.destination.QueueService">
+        <attribute name="JNDIName">jms/queue/deliveries</attribute>
+        <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+        <depends>jboss.messaging:service=PostOffice</depends>
+    </mbean>
+
+    <!-- inbound/source queue -->
+    <mbean xmbean-dd="xmdesc/Queue-xmbean.xml" name="jboss.messaging.destination:service=Queue,name=jms/queue/orders" code="org.jboss.jms.server.destination.QueueService">
+        <attribute name="JNDIName">jms/queue/orders</attribute>
+        <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+        <depends>jboss.messaging:service=PostOffice</depends>
+    </mbean>
+
+</server>

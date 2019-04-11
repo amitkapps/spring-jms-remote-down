@@ -21,7 +21,7 @@ public class MessagePublisherTest {
     MessagePublisher messagePublisher;
 
     @Test
-    public void publishMessage() throws InterruptedException {
+    public void publishMessageToDefaultDestination() throws InterruptedException {
 
 //        logger.info("Context loaded");
 
@@ -29,6 +29,20 @@ public class MessagePublisherTest {
 
             messagePublisher.postMessage("Message " + i);
             Thread.currentThread().sleep(5000L);
+        }
+
+    }
+
+    @Test
+    public void publishMessageToCustomDestination() throws InterruptedException {
+
+//        logger.info("Context loaded");
+
+        String destinationName = "jms/queue/deliveries";
+        for (int i = 0; i < 100; i++) {
+
+            messagePublisher.postMessage("Message " + i, destinationName);
+            Thread.currentThread().sleep(500L);
         }
 
     }
