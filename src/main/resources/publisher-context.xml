@@ -17,7 +17,7 @@
     </bean>
 
     <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
-        <property name="connectionFactory" ref="remoteConnectionFactory"/>
+        <property name="connectionFactory" ref="resilientCachingConnectionFactory"/>
         <property name="defaultDestinationName" value="#{publisherDestinationName}" />
     </bean>
 

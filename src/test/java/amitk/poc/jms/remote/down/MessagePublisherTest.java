@@ -46,10 +46,10 @@ public class MessagePublisherTest {
 //        logger.info("Context loaded");
 
 //        String destinationName = "jms/queue/deliveries";
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= 50; i++) {
 
             messagePublisher.postMessage("Message " + i, publisherDestinationName);
-            Thread.currentThread().sleep(1000L);
+            Thread.currentThread().sleep(100L);
         }
 
     }

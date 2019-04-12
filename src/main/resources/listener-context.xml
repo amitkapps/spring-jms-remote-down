@@ -16,23 +16,16 @@
     -->
 
     <import resource="jms-context.xml"/>
-    <bean id="listener" class="amitk.poc.jms.remote.down.MessageListener" />
+    <bean id="orderMessageListener" class="amitk.poc.jms.remote.down.OrderMessageListener" />
 
     <bean id="listenerDestinationName" class="java.lang.String">
         <!--        <constructor-arg value="#{appProperties.deliveriesDestinationName}"/>-->
         <constructor-arg value="#{appProperties.ordersDestinationName}"/>
     </bean>
 
-    <jms:listener-container container-type="default" connection-factory="remoteConnectionFactory" acknowledge="auto">
-        <jms:listener destination="#{listenerDestinationName}" ref="listener" method="onMessage" />
+    <jms:listener-container container-type="default" connection-factory="resilientCachingConnectionFactory" acknowledge="auto" >
+        <jms:listener destination="#{listenerDestinationName}" ref="orderMessageListener" method="onMessage" />
     </jms:listener-container>
 
-    <bean id="remoteConnectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">
-        <property name="jndiTemplate" ref="remoteJndiTemplate"/>
-        <property name="jndiName" value="ConnectionFactory" />
-        <property name="lookupOnStartup" value="false" />
-        <property name="proxyInterface" value="javax.jms.ConnectionFactory" />
-        <!--        <property name="cache" value="false" />-->
-    </bean>
 
 </beans>

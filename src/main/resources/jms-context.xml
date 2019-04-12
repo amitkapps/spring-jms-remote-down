@@ -39,12 +39,22 @@
     <bean id="remoteConnectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean" lazy-init="true">
         <property name="jndiTemplate" ref="remoteJndiTemplate"/>
         <property name="jndiName" value="ConnectionFactory" />
+<!--        <property name="jndiName" value="ClusteredConnectionFactory" />-->
         <!-- By default it looks up the jndi object on startup and failure results in context not getting loaded.
             Default message listener container will automatically issue retries once we're past the bean creation -->
         <property name="lookupOnStartup" value="false" />
         <property name="proxyInterface" value="javax.jms.ConnectionFactory" />
-<!--        <property name="cache" value="false" />-->
+        <property name="cache" value="false" />
     </bean>
 
+<!--    use the caching connection factory to allow for automatic recovery on connection failures-->
+    <bean id="resilientCachingConnectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
+        <property name="targetConnectionFactory" ref="remoteConnectionFactory"/>
+        <property name="reconnectOnException" value="true"/>
+<!--        Keep the default exception listener -->
+<!--        <property name="exceptionListener" ref="jmsExceptionListener"/>-->
+    </bean>
+
+    <bean id="jmsExceptionListener" class="amitk.poc.jms.remote.down.ConnectionExceptionListener"/>
 
 </beans>

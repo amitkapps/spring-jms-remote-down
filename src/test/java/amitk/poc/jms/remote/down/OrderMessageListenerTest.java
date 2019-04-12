@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles({"listener"})
 @ContextConfiguration("classpath:/application-context.xml")
-public class MessageListenerTest {
+public class OrderMessageListenerTest {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
