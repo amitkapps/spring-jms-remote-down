@@ -3,9 +3,13 @@
 ## Overview
 1. You have a local jms publisher/listener(Spring's `DefaultMessageListenerContainer`) client
 1. A remote JMS server (in this case JBoss)
-1. Application should continue to receive messages successfully:
+1. Message Consumer: 
+    1. Application should continue to receive messages successfully:
     1. If remote jms server is down on startup
     1. If remote jms server goes down temporarily or if there is a temporary network outage
+1. Message Publisher
+    1. The message publisher should hold back message publishes with built in re-try in case the remote JMS server is down
+    1. utilize Spring Retry which uses AOP to keep retrying publishes with different back-off policies. Ref: 
     
 ## Setup
 1. locally running jboss with a couple of queues

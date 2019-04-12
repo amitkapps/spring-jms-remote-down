@@ -38,7 +38,9 @@
 
     <bean id="remoteConnectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean" lazy-init="true">
         <property name="jndiTemplate" ref="remoteJndiTemplate"/>
+<!--        Default ConnectionFactory name available on JBoss -->
         <property name="jndiName" value="ConnectionFactory" />
+        <!-- Use the default clustered connection factory available from JBoss in case your jms server is running in an HA cluster of multiple nodes -->
 <!--        <property name="jndiName" value="ClusteredConnectionFactory" />-->
         <!-- By default it looks up the jndi object on startup and failure results in context not getting loaded.
             Default message listener container will automatically issue retries once we're past the bean creation -->
