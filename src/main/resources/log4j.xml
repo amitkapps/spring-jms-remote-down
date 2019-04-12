@@ -18,12 +18,12 @@
     </logger>
 
     <!-- 3rdparty Loggers -->
-    <logger name="org.springframework">
+    <logger name="org.springframework" additivity="false">
         <level value="info"/>
         <appender-ref ref="console"/>
     </logger>
 
-    <logger name="org">
+    <logger name="org" additivity="false">
         <level value="info"/>
         <appender-ref ref="console"/>
     </logger>
