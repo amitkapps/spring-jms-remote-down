@@ -18,3 +18,9 @@
 ## Key configurations
 1. For the remote connection factory lookup `JndiObjectFactoryBean`, property `lookupOnStartup` should be set to `true`
 1. Need to use a `CachingConnectionFactory` to allow re-connection on errors
+
+## References
+1. [JBoss jms connection factory lookup](https://stackoverflow.com/questions/1323489/how-to-initialize-connectionfactory-for-remote-jms-queue-when-remote-machine-is)
+1. [JBoss jnp naming context factory doc](https://access.redhat.com/documentation/en-US/JBoss_Enterprise_Web_Platform/5/html/Administration_And_Configuration_Guide/Naming_on_JBoss-The_Naming_InitialContext_Factories.html)
+1. [Tuning Spring jms message listener message consumption](https://uberconf.com/blog/bruce_snyder/2011/08/tuning_jms_message_consumption_in_spring)
+1. [JBoss 5 Connection Factory custom configuration](https://access.redhat.com/documentation/en-us/jboss_enterprise_application_platform/5/html/messaging_user_guide/conf.connectionfactory)
